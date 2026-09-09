@@ -168,7 +168,7 @@ int calcular_puntos_horario(horario_t horario_viaje ) {
     int puntos = 0;
 
     // Se decidió no incluir los minutos ya que no afectan el rango horario
-    if (horario_viaje.hora >= HORA_MINIMA_APROBADA && horario_viaje.hora <= HORA_MAXIMA_APROBADA) {
+    if ((horario_viaje.hora >= HORA_MINIMA_APROBADA) && (horario_viaje.hora <= HORA_MAXIMA_APROBADA)) {
         puntos = PUNTOS_HORA_APROBADO;
     } else {
         puntos = PUNTOS_HORA_DESAPROBADO;
