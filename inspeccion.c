@@ -1,51 +1,52 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-// Constantes para la pregunta 1
-#define MINIMO_PASAJEROS 1
-#define MAXIMO_PASAJEROS 250
-#define PASAJEROS_APTOS 180
+// Constante de validacion de input
+const int MINIMO_PASAJEROS = 1;
+const int MAXIMO_PASAJEROS = 250;
 
-// Constantes para la pregunta 2
-#define DISTANCIA_MINIMA 0.0f
-#define DISTANCIA_MAXIMA 150.0f
-#define DISTANCIA_APROBADA 50.0f
-#define DISTANCIA_NO_APROBADA 100.0f
+const float DISTANCIA_MINIMA = 0.0f;
+const float DISTANCIA_MAXIMA = 150.0f;
 
-// Constantes para la pregunta 3
-#define HORAS_MINIMAS 0
-#define HORAS_MAXIMAS 23
-#define MINUTOS_MINIMOS 0
-#define MINUTOS_MAXIMOS 59
-#define HORA_MINIMA_APROBADA 6
-#define HORA_MAXIMA_APROBADA 19
+const int HORAS_MINIMAS = 0;
+const int HORAS_MAXIMAS = 23;
+const int MINUTOS_MINIMOS = 0;
+const int MINUTOS_MAXIMOS = 59;
 
-// Constantes para la pregunta 4
-#define MATAFUEGOS 'M'
-#define ZARIGUEYAS 'Z'
-#define VACIO 'V'
+const char MATAFUEGOS = 'M';
+const char ZARIGUEYAS = 'Z';
+const char VACIO = 'V';
 
-// Constantes para el cálculo de puntaje
-#define PUNTAJE_INICIAL 10
+// Constantes de procesamiento
+const int PASAJEROS_APTOS = 180;
 
-#define PUNTOS_DISTANCIA_OK 0
-#define PUNTOS_DISTANCIA_MEDIO -1
-#define PUNTOS_DISTANCIA_MALO -2
+const float DISTANCIA_APROBADA = 50.0f;
+const float DISTANCIA_NO_APROBADA = 100.0f;
 
-#define PUNTOS_HORA_OK 0
-#define PUNTOS_HORA_MALO -3
+const int HORA_MINIMA_APROBADA = 6;
+const int HORA_MAXIMA_APROBADA = 19;
 
-#define PUNTOS_MATAFUEGOS 1
-#define PUNTOS_ZARIGUEYAS -1
-#define PUNTOS_VACIO -3
+// Constantes de calculo de puntaje
+const int PUNTAJE_INICIAL = 10;
+
+const int PUNTOS_DISTANCIA_APROBADA = 0;
+const int PUNTOS_DISTANCIA_REGULAR = -1;
+const int PUNTOS_DISTANCIA_DESAPROBADA = -2;
+
+const int PUNTOS_HORA_APROBADO = 0;
+const int PUNTOS_HORA_DESAPROBADO = -3;
+
+const int PUNTOS_MATAFUEGOS = 1;
+const int PUNTOS_ZARIGUEYAS = -1;
+const int PUNTOS_VACIO = -3;
 
 // Constantes para la evaluación del resultado
-#define PUNTAJE_APTO_MINIMO 8
-#define PUNTAJE_REVISION_MINIMO 5
+const int PUNTAJE_APTO_MINIMO = 8;
+const int PUNTAJE_REVISION_MINIMO = 5;
 
-#define ESTADO_APTO "-APTO-"
-#define ESTADO_REVISION "-REQUIERE REVISION-"
-#define ESTADO_NO_APTO "-NO APTO-"
+const char *ESTADO_APTO = "-APTO-";
+const char *ESTADO_REVISION = "-REQUIERE REVISION-";
+const char *ESTADO_NO_APTO = "-NO APTO-";
 
 typedef struct horario {
     int hora;
@@ -54,7 +55,8 @@ typedef struct horario {
 
 /*
  * Pre: -
- * Post: Solicita al usuario la cantidad de pasajeros y valida que esté dentro del rango permitido [1, 250]
+ * Post: Solicita al usuario la cantidad de pasajeros que realizarán el viaje y
+         valida que esté dentro del rango permitido [MINIMO_PASAJEROS, MAXIMO_PASAJEROS]
 */
 void pedir_pasajeros(int *pasajeros) {
     while ((*pasajeros < MINIMO_PASAJEROS) || (*pasajeros > MAXIMO_PASAJEROS)) {
@@ -69,7 +71,8 @@ void pedir_pasajeros(int *pasajeros) {
 
 /*
  * Pre: -
- * Post: Solicita al usuario la distancia recorrida y valida que esté dentro del rango permitido [0.0, 150.0]
+ * Post: Solicita al usuario la distancia recorrida al frenar y 
+         valida que esté dentro del rango permitido [DISTANCIA_MINIMA, DISTANCIA_MAXIMA]
 */
 void pedir_distancia(float *distancia) {
     while ((*distancia < DISTANCIA_MINIMA) || (*distancia > DISTANCIA_MAXIMA)) {
@@ -84,13 +87,16 @@ void pedir_distancia(float *distancia) {
 
 /*
  * Pre: -
- * Post: Solicita al usuario el horario del viaje y valida que esté dentro del rango permitido [00:00, 23:59]
+ * Post: Solicita al usuario el horario del viaje y 
+         valida que esté dentro del rango de horas y minutos permitidos 
+         [HORAS_MINIMAS, HORAS_MAXIMAS] para la hora 
+         [MINUTOS_MINIMOS, MINUTOS_MAXIMOS] para los minutos
 */
 void pedir_horario(horario_t *horario_viaje) {
     while (((horario_viaje->hora < HORAS_MINIMAS) || (horario_viaje->hora > HORAS_MAXIMAS)) || 
            ((horario_viaje->minutos < MINUTOS_MINIMOS) || (horario_viaje->minutos > MINUTOS_MAXIMOS))) {
         printf("¿A qué hora está programado el viaje inaugural? (formato: hh:mm)");
-        scanf("%d:%d", &horario_viaje->hora, &horario_viaje->minutos);
+        scanf("%d:%d", &(horario_viaje->hora), &(horario_viaje->minutos));
 
         if (((horario_viaje->hora < HORAS_MINIMAS) || (horario_viaje->hora > HORAS_MAXIMAS)) || 
             ((horario_viaje->minutos < MINUTOS_MINIMOS) || (horario_viaje->minutos > MINUTOS_MAXIMOS))) {
@@ -101,11 +107,16 @@ void pedir_horario(horario_t *horario_viaje) {
 
 /*
  * Pre: -
- * Post: Solicita al usuario el contenido del compartimento y valida que esté dentro de las opciones permitidas [M/Z/V]
+ * Post: Solicita al usuario el contenido del compartimento y 
+         valida que esté dentro de las opciones permitidas
+         [M] MATAFUEGOS
+         [Z] ZARIGUEYAS
+         [V] VACIO
 */
 void pedir_contenido_compartimento(char *tipo) {
     while ((*tipo != MATAFUEGOS) && (*tipo != ZARIGUEYAS) && (*tipo != VACIO)) {
-        printf("¿Qué encontró Marge en el compartimiento del matafuegos?");
+        printf("¿Qué encontró Marge en el compartimiento del matafuegos?\n");
+        printf("[M] Matafuegos\n[Z] Zarigüeyas\n[V] Vacío\n");
         scanf(" %c", tipo);
 
         if ((*tipo != MATAFUEGOS) && (*tipo != ZARIGUEYAS) && (*tipo != VACIO)) {
@@ -115,59 +126,66 @@ void pedir_contenido_compartimento(char *tipo) {
 }
 
 /*
- * Pre: 'pasajeros' debe estar dentro del rango válido [1, 250]
- * Post: Devuelve true si la cantidad de pasajeros es apta (<=180), false en caso de no serlo
+ * Pre: 'pasajeros' debe estar dentro del rango válido [MINIMO_PASAJEROS, MAXIMO_PASAJEROS]
+ * Post: Devuelve: 
+         true si la cantidad de pasajeros es apta (<= PASAJEROS_APTOS), 
+         false en caso de no serlo
 */
 bool es_cantidad_pasajeros_apta(int pasajeros) {
     return (pasajeros <= PASAJEROS_APTOS);
 }
 
 /*
- * Pre: 'distancia' debe estar dentro del rango válido [0.0, 150.0]
+ * Pre: 'distancia' debe estar dentro del rango válido [DISTANCIA_MINIMA, DISTANCIA_MAXIMA]
  * Post: Devuelve el puntaje correspondiente a la distancia recorrida:
-         0 puntos si la distancia es menor o igual a 50.0
-        -1 puntos si la distancia es mayor a 50.0 y menor o igual a 100.0
-        -2 puntos si la distancia es mayor a 100.0
+         PUNTOS_DISTANCIA_APROBADA si la distancia es menor o igual a la DISTANCIA_APROBADA
+         PUNTOS_DISTANCIA_REGULAR si la distancia ese encuentra entre la DISTANCIA_APROBADA y la DISTANCIA_NO_APROBADA
+         PUNTOS_DISTANCIA_DESAPROBADA si la distancia es mayor a la DISTANCIA_NO_APROBADA
 */
 int calcular_puntos_distancia(float distancia) {
     int puntos = 0;
 
     if (distancia <= DISTANCIA_APROBADA) {
-        puntos = PUNTOS_DISTANCIA_OK;
+        puntos = PUNTOS_DISTANCIA_APROBADA;
     } else if ( distancia <= DISTANCIA_NO_APROBADA) {
-        puntos = PUNTOS_DISTANCIA_MEDIO;
+        puntos = PUNTOS_DISTANCIA_REGULAR;
     } else {
-        puntos = PUNTOS_DISTANCIA_MALO;
+        puntos = PUNTOS_DISTANCIA_DESAPROBADA;
     }
 
     return puntos;
 }
 
 /*
- * Pre: 'horario_viaje' debe contener hora en rango [0, 23] y minutos en [0, 59]
+ * Pre: 'horario_viaje' debe estar dentro del rango válido:
+         hora en rango [HORAS_MINIMAS, HORAS_MAXIMAS]
+         minutos en [MINUTOS_MINIMOS, MINUTOS_MAXIMOS]
  * Post: Devuelve el puntaje correspondiente al horario del viaje:
-         0 puntos si el horario está entre 6:00 y 19:59
-        -3 puntos si el horario está fuera de ese rango
+         PUNTOS_HORA_APROBADO si el horario está entre la HORA_MINIMA_APROBADA y la HORA_MAXIMA_APROBADA
+         PUNTOS_HORA_DESAPROBADO si el horario está fuera de ese rango
 */
 int calcular_puntos_horario(horario_t horario_viaje ) {
     int puntos = 0;
 
     // Se decidio no incluir los minutos ya que no afectan el rango horario
     if (horario_viaje.hora >= HORA_MINIMA_APROBADA && horario_viaje.hora <= HORA_MAXIMA_APROBADA) {
-        puntos = PUNTOS_HORA_OK;
+        puntos = PUNTOS_HORA_APROBADO;
     } else {
-        puntos = PUNTOS_HORA_MALO;
+        puntos = PUNTOS_HORA_DESAPROBADO;
     }
 
     return puntos;
 }
 
 /*
- * Pre: 'tipo' debe ser uno de los caracteres válidos [M/Z/V]
+ * Pre: 'tipo' debe ser uno de los caracteres válidos
+        [M] MATAFUEGOS
+        [Z] ZARIGUEYAS
+        [V] VACIO
  * Post: Devuelve el puntaje correspondiente al contenido del compartimento:
-         1 punto si el compartimento contiene un matafuegos (M)
-        -1 punto si el compartimento contiene zarigüeyas (Z)
-        -3 puntos si el compartimento está vacío (V)
+         PUNTOS_MATAFUEGOS si el compartimento contiene MATAFUEGOS (M)
+         PUNTOS_ZARIGUEYAS si el compartimento contiene ZARIGUEYAS (Z)
+         PUNTOS_VACIO si el compartimento está VACIO (V)
 */
 int calcular_puntos_compartimento(char tipo) {
     int puntos = 0;
@@ -184,9 +202,9 @@ int calcular_puntos_compartimento(char tipo) {
 }
 
 /*
- * Pre: 'puntos_distancia' debe estar dentro de los valores válidos {-2, -1, 0}
-        'puntos_horario' debe estar dentro de los valores válidos {-3, 0}
-        'puntos_compartimento' debe estar dentro de los valores válidos {-3, -1, 1}
+ * Pre: 'puntos_distancia' debe estar dentro de los valores válidos {PUNTOS_DISTANCIA_APROBADA, PUNTOS_DISTANCIA_REGULAR, PUNTOS_DISTANCIA_DESAPROBADA}
+        'puntos_horario' debe estar dentro de los valores válidos {PUNTOS_HORA_APROBADO, PUNTOS_HORA_DESAPROBADO}
+        'puntos_compartimento' debe estar dentro de los valores válidos {PUNTOS_MATAFUEGOS, PUNTOS_ZARIGUEYAS, PUNTOS_VACIO}
  * Post: Devuelve la suma del puntaje inicial y los puntos obtenidos en cada sector
 */
 int calcular_puntaje_total(int puntos_distancia, int puntos_horario, int puntos_compartimento) {
@@ -194,7 +212,7 @@ int calcular_puntaje_total(int puntos_distancia, int puntos_horario, int puntos_
 }
 
 int main() {
-    char* estado_final = "";
+    const char* estado_final = "";
     int pasajeros = -1;
     pedir_pasajeros(&pasajeros);
 
