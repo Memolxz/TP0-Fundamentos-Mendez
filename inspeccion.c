@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-// Constante de validacion de input
+// Constante de validación de input
 const int MINIMO_PASAJEROS = 1;
 const int MAXIMO_PASAJEROS = 250;
 
@@ -17,7 +17,7 @@ const char MATAFUEGOS = 'M';
 const char ZARIGUEYAS = 'Z';
 const char VACIO = 'V';
 
-// Constantes de procesamiento
+// Constantes de requisitos de aprobación
 const int PASAJEROS_APTOS = 180;
 
 const float DISTANCIA_APROBADA = 50.0f;
@@ -108,7 +108,7 @@ void pedir_horario(horario_t *horario_viaje) {
 /*
  * Pre: -
  * Post: Solicita al usuario el contenido del compartimento y 
-         valida que esté dentro de las opciones permitidas
+         valida que esté dentro de las opciones permitidas:
          [M] MATAFUEGOS
          [Z] ZARIGUEYAS
          [V] VACIO
@@ -139,7 +139,7 @@ bool es_cantidad_pasajeros_apta(int pasajeros) {
  * Pre: 'distancia' debe estar dentro del rango válido [DISTANCIA_MINIMA, DISTANCIA_MAXIMA]
  * Post: Devuelve el puntaje correspondiente a la distancia recorrida:
          PUNTOS_DISTANCIA_APROBADA si la distancia es menor o igual a la DISTANCIA_APROBADA
-         PUNTOS_DISTANCIA_REGULAR si la distancia ese encuentra entre la DISTANCIA_APROBADA y la DISTANCIA_NO_APROBADA
+         PUNTOS_DISTANCIA_REGULAR si la distancia se encuentra entre la DISTANCIA_APROBADA y la DISTANCIA_NO_APROBADA
          PUNTOS_DISTANCIA_DESAPROBADA si la distancia es mayor a la DISTANCIA_NO_APROBADA
 */
 int calcular_puntos_distancia(float distancia) {
@@ -167,7 +167,7 @@ int calcular_puntos_distancia(float distancia) {
 int calcular_puntos_horario(horario_t horario_viaje ) {
     int puntos = 0;
 
-    // Se decidio no incluir los minutos ya que no afectan el rango horario
+    // Se decidió no incluir los minutos ya que no afectan el rango horario
     if (horario_viaje.hora >= HORA_MINIMA_APROBADA && horario_viaje.hora <= HORA_MAXIMA_APROBADA) {
         puntos = PUNTOS_HORA_APROBADO;
     } else {
@@ -178,7 +178,7 @@ int calcular_puntos_horario(horario_t horario_viaje ) {
 }
 
 /*
- * Pre: 'tipo' debe ser uno de los caracteres válidos
+ * Pre: 'tipo' debe ser uno de los caracteres válidos:
         [M] MATAFUEGOS
         [Z] ZARIGUEYAS
         [V] VACIO
