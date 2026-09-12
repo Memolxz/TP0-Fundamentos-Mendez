@@ -28,6 +28,7 @@ const int HORA_MAXIMA_APROBADA = 19;
 
 // Constantes de calculo de puntaje
 const int PUNTAJE_INICIAL = 10;
+const int PUNTAJE_MAXIMO = 10;
 
 const int PUNTOS_DISTANCIA_APROBADA = 0;
 const int PUNTOS_DISTANCIA_REGULAR = -1;
@@ -208,7 +209,12 @@ int calcular_puntos_compartimento(char tipo) {
  * Post: Devuelve la suma del puntaje inicial y los puntos obtenidos en cada sector
 */
 int calcular_puntaje_total(int puntos_distancia, int puntos_horario, int puntos_compartimento) {
-    return PUNTAJE_INICIAL + puntos_distancia + puntos_horario + puntos_compartimento;
+    int puntaje_total = 0;
+    puntaje_total = PUNTAJE_INICIAL + puntos_distancia + puntos_horario + puntos_compartimento;
+    if (puntaje_total > PUNTAJE_MAXIMO) {
+        puntaje_total = PUNTAJE_MAXIMO;
+    }
+    return puntaje_total;
 }
 
 int main() {
